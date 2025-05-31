@@ -41,7 +41,6 @@ const nextConfig = {
     ];
   },
   experimental: {
-    newNextLinkBehavior: true,
     instrumentationHook: true,
     outputFileTracingRoot: path.join(__dirname, "../../"),
   },
