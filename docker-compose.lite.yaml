@@ -10,7 +10,7 @@ x-backend-app-env: &backend-app-env
   NODE_ENV: production
   DATABASE_HOST: ${DATABASE_HOST:-postgres}
   DATABASE_PORT: ${DATABASE_PORT:-55432}
-  CLICKHOUSE_HOST: ${CLICKHOUSE_HOST:-http://clickhouse-server:8124}
+  CLICKHOUSE_HOST: ${CLICKHOUSE_HOST:-http://clickhouse-server:8123}
   TEMPORAL_ADDRESS: ${TEMPORAL_ADDRESS:-temporal:7233}
   WORKSPACE_NAME: ${WORKSPACE_NAME:-Default}
   AUTH_MODE: ${AUTH_MODE:-single-tenant}
@@ -126,12 +126,13 @@ services:
     environment:
       <<: *clickhouse-credentials
     ports:
-      - "8124:8124"
+      - "8123:8123"
       - "9000:9000"
       - "9009:9009"
     volumes:
       - clickhouse_lib:/var/lib/clickhouse
       - clickhouse_log:/var/log/clickhouse-server
+      - ./packages/backend-lib/clickhouse_config.dev.xml:/etc/clickhouse-server/config.xml
     networks:
       - dittofeed-network-lite
   # Note that minio is only used for local development. In production, use any S3-compatible storage.
