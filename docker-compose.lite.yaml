@@ -132,7 +132,7 @@ services:
     volumes:
       - clickhouse_lib:/var/lib/clickhouse
       - clickhouse_log:/var/log/clickhouse-server
-      - ./packages/backend-lib/clickhouse_config.dev.xml:/etc/clickhouse-server/config.xml
+      - ./packages/backend-lib/clickhouse_config.dev.xml:/etc/clickhouse-server/config.d/custom.xml
     networks:
       - dittofeed-network-lite
   # Note that minio is only used for local development. In production, use any S3-compatible storage.
