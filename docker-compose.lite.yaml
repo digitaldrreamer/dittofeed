@@ -83,7 +83,7 @@ services:
     networks:
       - dittofeed-network-lite
     ports:
-      - 7233:7233
+      - "8233:7233"
     volumes:
       - ./packages/backend-lib/temporal-dynamicconfig:/etc/temporal/config/dynamicconfig
   temporal-ui:
