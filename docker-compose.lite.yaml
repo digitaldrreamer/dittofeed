@@ -31,16 +31,16 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      # - postgres
+      - postgres
       - temporal
-      # - clickhouse-server
+      - clickhouse-server
     environment:
       <<: *backend-app-env
       # comment out after initial setup
       BOOTSTRAP: "true"
     # README: To add local env variables uncomment the following line and add a .env file in the root directory
-    env_file:
-      - .env
+    # env_file:
+    #   - .env
     networks:
       - dittofeed-network-lite
   # useful for upgrading dittofeed
@@ -53,9 +53,9 @@ services:
     logging:
       driver: "local"
     depends_on:
-      # - postgres
+      - postgres
       - temporal
-      # - clickhouse-server
+      - clickhouse-server
     environment:
       <<: *backend-app-env
     # README: To add local env variables uncomment the following line and add a .env file in the root directory
@@ -63,28 +63,30 @@ services:
     #   - .env
     networks:
       - dittofeed-network-lite
-temporal:
-  container_name: temporal
-  restart: always
-  logging:
-    driver: "local"
-  environment:
-    - DB=postgresql
-    - DB_PORT=${DATABASE_PORT:-5435}
-    - POSTGRES_USER=${DATABASE_USER:-postgres}
-    - POSTGRES_PWD=${DATABASE_PASSWORD:-password}
-    - POSTGRES_SEEDS=${DATABASE_HOST:-host.docker.internal}
-    - DYNAMIC_CONFIG_FILE_PATH=config/dynamicconfig/prod.yaml
-  image: temporalio/auto-setup:${TEMPORAL_VERSION:-1.22.4}
-  labels:
-    kompose.volume.type: configMap
-  networks:
-    - dittofeed-network-lite
-  ports:
-    - 7233:7233
-  volumes:
-    - ./packages/backend-lib/temporal-dynamicconfig:/etc/temporal/config/dynamicconfig
-temporal-ui:
+  temporal:
+    container_name: temporal
+    restart: always
+    logging:
+      driver: "local"
+    depends_on:
+      - postgres
+    environment:
+      - DB=postgresql
+      - DB_PORT=${DATABASE_PORT:-5432}
+      - POSTGRES_USER=${DATABASE_USER:-postgres}
+      - POSTGRES_PWD=${DATABASE_PASSWORD:-password}
+      - POSTGRES_SEEDS=${DATABASE_HOST:-postgres}
+      - DYNAMIC_CONFIG_FILE_PATH=config/dynamicconfig/prod.yaml
+    image: temporalio/auto-setup:${TEMPORAL_VERSION:-1.22.4}
+    labels:
+      kompose.volume.type: configMap
+    networks:
+      - dittofeed-network-lite
+    ports:
+      - 7233:7233
+    volumes:
+      - ./packages/backend-lib/temporal-dynamicconfig:/etc/temporal/config/dynamicconfig
+  temporal-ui:
     profiles: ["temporal-ui"]
     container_name: temporal-ui
     restart: always
@@ -100,41 +102,41 @@ temporal-ui:
       - dittofeed-network-lite
     ports:
       - 8080:8080
-  # postgres:
-  #   image: postgres:${POSTGRES_VERSION:-15}
-  #   restart: always
-  #   logging:
-  #     driver: "local"
-  #   environment:
-  #     - POSTGRES_PASSWORD=${DATABASE_PASSWORD:-password}
-  #     - POSTGRES_USER=${DATABASE_USER:-postgres}
-  #     - POSTGRES_DB=dittofeed
-  #   ports:
-  #     - "5435:5432"
-  #   volumes:
-  #     - postgres:/var/lib/postgresql/data
-  #   networks:
-  #     - dittofeed-network-lite
-  # clickhouse-server:
-  #   image: clickhouse/clickhouse-server:24.12.6.70-alpine
-  #   restart: always
-  #   logging:
-  #     driver: "local"
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         memory: ${CLICKHOUSE_CONTAINER_MEM_LIMIT:-1024}m
-  #   environment:
-  #     <<: *clickhouse-credentials
-  #   ports:
-  #     - "8123:8123"
-  #     - "9000:9000"
-  #     - "9009:9009"
-  #   volumes:
-  #     - clickhouse_lib:/var/lib/clickhouse
-  #     - clickhouse_log:/var/log/clickhouse-server
-  #   networks:
-  #     - dittofeed-network-lite
+  postgres:
+    image: postgres:${POSTGRES_VERSION:-15}
+    restart: always
+    logging:
+      driver: "local"
+    environment:
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD:-password}
+      - POSTGRES_USER=${DATABASE_USER:-postgres}
+      - POSTGRES_DB=dittofeed
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    networks:
+      - dittofeed-network-lite
+  clickhouse-server:
+    image: clickhouse/clickhouse-server:24.12.6.70-alpine
+    restart: always
+    logging:
+      driver: "local"
+    deploy:
+      resources:
+        limits:
+          memory: ${CLICKHOUSE_CONTAINER_MEM_LIMIT:-1024}m
+    environment:
+      <<: *clickhouse-credentials
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+      - "9009:9009"
+    volumes:
+      - clickhouse_lib:/var/lib/clickhouse
+      - clickhouse_log:/var/log/clickhouse-server
+    networks:
+      - dittofeed-network-lite
   # Note that minio is only used for local development. In production, use any S3-compatible storage.
   blob-storage:
     image: minio/minio
@@ -151,9 +153,9 @@ temporal-ui:
       - blob-storage:/data
     command: server --console-address ":9001" /data
 volumes:
-  # postgres:
-  # clickhouse_lib:
-  # clickhouse_log:
+  postgres:
+  clickhouse_lib:
+  clickhouse_log:
   blob-storage:
 
 networks:
