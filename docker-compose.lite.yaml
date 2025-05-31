@@ -83,7 +83,7 @@ services:
     networks:
       - dittofeed-network-lite
     ports:
-      - "8233:7233"
+      - "8233:8233"
     volumes:
       - ./packages/backend-lib/temporal-dynamicconfig:/etc/temporal/config/dynamicconfig
   temporal-ui:
@@ -95,7 +95,7 @@ services:
     depends_on:
       - temporal
     environment:
-      - TEMPORAL_ADDRESS=temporal:7233
+      - TEMPORAL_ADDRESS=temporal:8233
       - TEMPORAL_CORS_ORIGINS=http://localhost:3000
     image: temporalio/ui:${TEMPORAL_UI_VERSION:-2.22.1}
     networks:
