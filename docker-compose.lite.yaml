@@ -160,12 +160,5 @@ volumes:
 
 networks:
   dittofeed-network-lite:
-    external: true
-
-volumes:
-  tk0okokoccsg80wwg4ko4scg_postgres:
-    external: true
-  tk0okokoccsg80wwg4ko4scg_clickhouse-lib:
-    external: true
-  tk0okokoccsg80wwg4ko4scg_clickhouse-log:
-    external: true
+    driver: bridge
+    name: dittofeed-network-lite
