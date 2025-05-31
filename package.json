@@ -1,7 +1,7 @@
 {
   "name": "dittofeed",
   "version": "0.0.3",
-  "description": "Developer first, open source customer engagement platform.",
+  "description": "Developer first, open source customer engagement platform. This is a fork of Dittofeed Lite.",
   "repository": "git@github.com:ideamarketinc/marketing-automation.git",
   "author": "Max Gurewitz <max@dittofeed.com>, Chandler Craig <chandler@dittofeed.com>",
   "private": true,
