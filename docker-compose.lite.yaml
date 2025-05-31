@@ -83,7 +83,7 @@ services:
     networks:
       - dittofeed-network-lite
     ports:
-      - "8233:8233"
+      - "7233:7233"
     volumes:
       - ./packages/backend-lib/temporal-dynamicconfig:/etc/temporal/config/dynamicconfig
   temporal-ui:
@@ -95,7 +95,7 @@ services:
     depends_on:
       - temporal
     environment:
-      - TEMPORAL_ADDRESS=temporal:8233
+      - TEMPORAL_ADDRESS=temporal:7233
       - TEMPORAL_CORS_ORIGINS=http://localhost:3000
     image: temporalio/ui:${TEMPORAL_UI_VERSION:-2.22.1}
     networks:
@@ -154,11 +154,14 @@ services:
     command: server --console-address ":9001" /data
 volumes:
   postgres:
+    external: true
   clickhouse_lib:
+    external: true
   clickhouse_log:
+    external: true
   blob-storage:
+    external: true
 
 networks:
   dittofeed-network-lite:
-    driver: bridge
-    name: dittofeed-network-lite
+    external: true

@@ -141,7 +141,7 @@ services:
     envVars:
     - fromGroup: temporal-shared
     - key: PORT
-      value: 8233
+      value: 7233
     - key: DBNAME
       fromDatabase:
         name: dittofeed-db
