@@ -9,7 +9,7 @@ x-backend-app-env: &backend-app-env
   <<: [*clickhouse-credentials, *database-credentials]
   NODE_ENV: production
   DATABASE_HOST: ${DATABASE_HOST:-postgres}
-  DATABASE_PORT: ${DATABASE_PORT:-5437}
+  DATABASE_PORT: ${DATABASE_PORT:-55432}
   CLICKHOUSE_HOST: ${CLICKHOUSE_HOST:-http://clickhouse-server:8124}
   TEMPORAL_ADDRESS: ${TEMPORAL_ADDRESS:-temporal:7233}
   WORKSPACE_NAME: ${WORKSPACE_NAME:-Default}
@@ -72,7 +72,7 @@ services:
       - postgres
     environment:
       - DB=postgresql
-      - DB_PORT=${DATABASE_PORT:-5437}
+      - DB_PORT=${DATABASE_PORT:-55432}
       - POSTGRES_USER=${DATABASE_USER:-postgres}
       - POSTGRES_PWD=${DATABASE_PASSWORD:-password}
       - POSTGRES_SEEDS=${DATABASE_HOST:-postgres}
@@ -112,7 +112,7 @@ services:
       - POSTGRES_USER=${DATABASE_USER:-postgres}
       - POSTGRES_DB=dittofeed
     ports:
-      - "5437:5432"
+      - "55432:5432"
     volumes:
       - postgres:/var/lib/postgresql/data
     networks:
@@ -160,5 +160,12 @@ volumes:
 
 networks:
   dittofeed-network-lite:
-    driver: bridge
-    name: dittofeed-network-lite
+    external: true
+
+volumes:
+  tk0okokoccsg80wwg4ko4scg_postgres:
+    external: true
+  tk0okokoccsg80wwg4ko4scg_clickhouse-lib:
+    external: true
+  tk0okokoccsg80wwg4ko4scg_clickhouse-log:
+    external: true
