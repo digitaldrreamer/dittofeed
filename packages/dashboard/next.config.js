@@ -27,11 +27,13 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      {
-        source: "/",
-        destination: "/journeys",
-        permanent: false,
-      },
+      // {
+      //   // Redirect root to journeys within the dashboard basePath
+      //   source: "/",
+      //   destination: "/journeys",
+      //   permanent: false,
+      // },
+      // Remove the conflicting second redirect or modify it if needed
       {
         source: "/",
         destination: "/dashboard",
@@ -43,6 +45,7 @@ const nextConfig = {
   experimental: {
     instrumentationHook: true,
     outputFileTracingRoot: path.join(__dirname, "../../"),
+    // Removed newNextLinkBehavior as it's no longer valid
   },
 };
 
