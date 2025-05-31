@@ -9,8 +9,8 @@ x-backend-app-env: &backend-app-env
   <<: [*clickhouse-credentials, *database-credentials]
   NODE_ENV: production
   DATABASE_HOST: ${DATABASE_HOST:-postgres}
-  DATABASE_PORT: ${DATABASE_PORT:-5432}
-  CLICKHOUSE_HOST: ${CLICKHOUSE_HOST:-http://clickhouse-server:8123}
+  DATABASE_PORT: ${DATABASE_PORT:-5437}
+  CLICKHOUSE_HOST: ${CLICKHOUSE_HOST:-http://clickhouse-server:8124}
   TEMPORAL_ADDRESS: ${TEMPORAL_ADDRESS:-temporal:7233}
   WORKSPACE_NAME: ${WORKSPACE_NAME:-Default}
   AUTH_MODE: ${AUTH_MODE:-single-tenant}
@@ -72,7 +72,7 @@ services:
       - postgres
     environment:
       - DB=postgresql
-      - DB_PORT=${DATABASE_PORT:-5432}
+      - DB_PORT=${DATABASE_PORT:-5437}
       - POSTGRES_USER=${DATABASE_USER:-postgres}
       - POSTGRES_PWD=${DATABASE_PASSWORD:-password}
       - POSTGRES_SEEDS=${DATABASE_HOST:-postgres}
@@ -112,7 +112,7 @@ services:
       - POSTGRES_USER=${DATABASE_USER:-postgres}
       - POSTGRES_DB=dittofeed
     ports:
-      - "5432:5432"
+      - "5437:5432"
     volumes:
       - postgres:/var/lib/postgresql/data
     networks:
@@ -129,7 +129,7 @@ services:
     environment:
       <<: *clickhouse-credentials
     ports:
-      - "8123:8123"
+      - "8124:8124"
       - "9000:9000"
       - "9009:9009"
     volumes:
