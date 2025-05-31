@@ -39,8 +39,8 @@ services:
       # comment out after initial setup
       BOOTSTRAP: "true"
     # README: To add local env variables uncomment the following line and add a .env file in the root directory
-    # env_file:
-    #   - .env
+    env_file:
+      - .env
     networks:
       - dittofeed-network-lite
   # useful for upgrading dittofeed
@@ -76,7 +76,6 @@ services:
       - POSTGRES_USER=${DATABASE_USER:-postgres}
       - POSTGRES_PWD=${DATABASE_PASSWORD:-password}
       - POSTGRES_SEEDS=${DATABASE_HOST:-postgres}
-      - DYNAMIC_CONFIG_FILE_PATH=/etc/temporal/dynamicconfig/prod.yaml
     image: temporalio/auto-setup:${TEMPORAL_VERSION:-1.22.4}
     labels:
       kompose.volume.type: configMap
@@ -84,8 +83,6 @@ services:
       - dittofeed-network-lite
     ports:
       - "7233:7233"
-    volumes:
-      - ./packages/backend-lib/temporal-dynamicconfig/prod.yaml:/etc/temporal/dynamicconfig/prod.yaml
   temporal-ui:
     profiles: ["temporal-ui"]
     container_name: temporal-ui
